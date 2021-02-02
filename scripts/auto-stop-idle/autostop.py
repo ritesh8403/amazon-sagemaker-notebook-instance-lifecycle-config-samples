@@ -17,9 +17,9 @@ import getopt, sys
 import urllib3
 import boto3
 import json
-
+print("1")
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
+print("2")
 # Usage
 usageInfo = """Usage:
 This scripts checks if a notebook is idle for X seconds if it does, it'll stop the notebook:
@@ -36,7 +36,7 @@ helpInfo = """-t, --time
 -h, --help
     Help information
 """
-
+print("3")
 # Read in command-line parameters
 idle = True
 port = '8443'
@@ -58,7 +58,7 @@ try:
 except getopt.GetoptError:
     print(usageInfo)
     exit(1)
-
+print("4")
 # Missing configuration notification
 missingConfiguration = False
 if not time:
@@ -67,7 +67,7 @@ if not time:
 if missingConfiguration:
     exit(2)
 
-
+print("5")
 def is_idle(last_activity):
     last_activity = datetime.strptime(last_activity,"%Y-%m-%dT%H:%M:%S.%fz")
     if (datetime.now() - last_activity).total_seconds() > time:
@@ -77,13 +77,13 @@ def is_idle(last_activity):
         print('Notebook is not idle. Last activity time = ', last_activity)
         return False
 
-
+print("6")
 def get_notebook_name():
     log_path = '/opt/ml/metadata/resource-metadata.json'
     with open(log_path, 'r') as logs:
         _logs = json.load(logs)
     return _logs['ResourceName']
-
+print("7")
 # This is hitting Jupyter's sessions API: https://github.com/jupyter/jupyter/wiki/Jupyter-Notebook-Server-API#Sessions-API
 response = requests.get('https://localhost:'+port+'/api/sessions', verify=False)
 data = response.json()
